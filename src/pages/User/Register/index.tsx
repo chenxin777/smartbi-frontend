@@ -1,12 +1,11 @@
 import { Footer } from '@/components';
-import { getLoginUserUsingGet, userLoginUsingPost } from '@/services/smartbi/userController';
+import { userRegisterUsingPost } from '@/services/smartbi/userController';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormText } from '@ant-design/pro-components';
-import { history, Link, useModel } from '@umijs/max';
+import { history } from '@umijs/max';
 import { message, Tabs } from 'antd';
 import { createStyles } from 'antd-style';
 import React, { useState } from 'react';
-import { flushSync } from 'react-dom';
 
 const useStyles = createStyles(({ token }) => {
   return {
@@ -45,44 +44,30 @@ const useStyles = createStyles(({ token }) => {
 });
 const Login: React.FC = () => {
   const [type, setType] = useState<string>('account');
-  const {refresh, setInitialState } = useModel('@@initialState');
   const { styles } = useStyles();
-
-  /**
-   * 登录成功后，获取用户信息
-   */
-  const fetchUserInfo = async () => {
-    const userInfo = await getLoginUserUsingGet();
-    if (userInfo) {
-      flushSync(() => {
-        // @ts-ignore
-        setInitialState((s) => ({
-          ...s,
-          currentUser: userInfo,
-        }));
-      });
+  
+  const handleSubmit = async (values: API.UserRegisterRequest) => {
+    // 校验
+    const { userPassword, checkPassword } = values;
+    if (userPassword !== checkPassword) {
+      message.error('两次密码不一致！');
+      return;
     }
-  };
-  const handleSubmit = async (values: API.UserLoginRequest) => {
     try {
-      // 登录
-      const res = await userLoginUsingPost({
-        ...values,
-      });
-      if (res.code === 0) {
-        const defaultLoginSuccessMessage = '登录成功！';
+      // 注册
+      const id = await userRegisterUsingPost(values);
+      if (id) {
+        const defaultLoginSuccessMessage = '注册成功！';
         message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo();
-        const urlParams = new URL(window.location.href).searchParams;
-        history.push(urlParams.get('redirect') || '/');
-        await refresh()
+        /** 此方法会跳转到 redirect 参数所在的位置 */
+        if (!history) return;
+        history.push({
+          pathname: '/user/login',
+        });
         return;
-      } else {
-        message.error(res.message);
       }
-    } catch (error) {
-      const defaultLoginFailureMessage = '登录失败，请重试！';
-      console.log(error);
+    } catch (error: any) {
+      const defaultLoginFailureMessage = '注册失败，请重试！';
       message.error(defaultLoginFailureMessage);
     }
   };
@@ -95,6 +80,11 @@ const Login: React.FC = () => {
         }}
       >
         <LoginForm
+          submitter={{
+            searchConfig: {
+              submitText: '注册',
+            },
+          }}
           contentStyle={{
             minWidth: 280,
             maxWidth: '75vw',
@@ -120,7 +110,7 @@ const Login: React.FC = () => {
             items={[
               {
                 key: 'account',
-                label: '账户密码登录',
+                label: '账户密码注册',
               },
             ]}
           />
@@ -152,17 +142,34 @@ const Login: React.FC = () => {
                     required: true,
                     message: '请输入密码！',
                   },
+                  {
+                    min: 8,
+                    type: 'string',
+                    message: '长度小于 8'
+                  }
+                ]}
+              />
+              <ProFormText.Password
+                name="checkPassword"
+                fieldProps={{
+                  size: 'large',
+                  prefix: <LockOutlined />,
+                }}
+                placeholder={'重复密码'}
+                rules={[
+                  {
+                    required: true,
+                    message: '请再次输入密码！',
+                  },
+                  {
+                    min: 8,
+                    type: 'string',
+                    message: '长度小于 8'
+                  }
                 ]}
               />
             </>
           )}
-          <div
-            style={{
-              marginBottom: 24,
-            }}
-          >
-            <Link to="/user/register">注册</Link>
-          </div>
         </LoginForm>
       </div>
       <Footer />
