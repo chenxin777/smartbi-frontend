@@ -8,6 +8,7 @@
     ],
   },
   {path: '/add_chart', name: 'AI图表', icon: 'BarChartOutlined', component: './AddChart'},
+  {path: '/add_chart_async', name: 'AI图表异步', icon: 'BarChartOutlined', component: './AddChartAsync'},
   {path: '/my_chart', name: '我的图表', icon: 'pieChartOutlined', component: './MyChart'},
   { path: '/', redirect: '/add_chart' },
   { path: '*', layout: false, component: './404' },
