@@ -1,4 +1,8 @@
-import {genChartByAiAsyncUsingPost, genChartByAiUsingPost} from '@/services/smartbi/chartController';
+import {
+  genChartByAiAsyncMqUsingPost,
+  genChartByAiAsyncUsingPost,
+  genChartByAiUsingPost
+} from '@/services/smartbi/chartController';
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, Card, Form, Input, message, Select, Space, Upload } from 'antd';
 import { useForm } from 'antd/es/form/Form';
@@ -23,7 +27,7 @@ const AddChartAsync: React.FC = () => {
       file: undefined,
     };
     try {
-      const res = await genChartByAiAsyncUsingPost(params, {}, values.file.file.originFileObj);
+      const res = await genChartByAiAsyncMqUsingPost(params, {}, values.file.file.originFileObj);
       if (!res?.data) {
         message.error('分析失败');
       } else {
