@@ -1,9 +1,9 @@
-import { AvatarDropdown, AvatarName, Footer, Question } from '@/components';
-import { LinkOutlined } from '@ant-design/icons';
-import type { RunTimeLayoutConfig } from '@umijs/max';
-import { history, Link } from '@umijs/max';
-import { requestConfig } from './requestConfig';
+import { AvatarDropdown, AvatarName, Footer } from '@/components';
 import { getLoginUserUsingGet } from '@/services/smartbi/userController';
+import type { RunTimeLayoutConfig } from '@umijs/max';
+import { history } from '@umijs/max';
+import { requestConfig } from './requestConfig';
+import logo from '../public/logo.svg';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -31,14 +31,12 @@ export async function getInitialState(): Promise<{
       currentUser,
     };
   }
-  return {
-  };
+  return {};
 }
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
-    actionsRender: () => [<Question key="doc" />],
     avatarProps: {
       src: initialState?.currentUser?.userAvatar,
       title: <AvatarName />,
@@ -78,6 +76,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       },
     ],
     menuHeaderRender: undefined,
+    logo: logo,
   };
 };
 

@@ -1,5 +1,4 @@
-import { ProLayoutProps } from '@ant-design/pro-components';
-
+import {ProLayoutProps} from '@ant-design/pro-components';
 /**
  * @name
  */
@@ -15,9 +14,9 @@ const Settings: ProLayoutProps & {
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,
-  title: 'Smart BI',
+  title: 'Play BI',
   pwa: true,
-  logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
+  logo: 'http://8.140.27.137:9000/mypic/imgs/logo_repeat_1720761777529__352124.svg',
   iconfontUrl: '',
   token: {
     // 参见ts声明，demo 见文档，通过token 修改样式

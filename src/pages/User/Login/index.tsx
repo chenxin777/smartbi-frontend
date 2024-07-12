@@ -100,7 +100,7 @@ const Login: React.FC = () => {
             maxWidth: '75vw',
           }}
           logo={<img alt="logo" src="/logo.svg" />}
-          title="Smart BI"
+          title="Play BI"
           subTitle={
             <a href="https://github.com/chenxin777" target="_blank" rel="noreferrer">
               玩物志原创项目
